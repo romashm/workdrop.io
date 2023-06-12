@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+   <head>
+      <meta charset="UTF-8">
+      <title>Опросник</title>
+      <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+      <link rel="stylesheet" href="{% static './style.css' %}">
+   </head>
+   <div class="big-circles">
+      <div class="big-circle"></div>
+      <div class="big-circle"></div>
+      <div class="big-circle"></div>
+   </div>
+   <section id="home">
+      <div class="slide-wrapper questionTree">
+         <div class="smallcircles">
+            <div class="small-circle"></div>
+            <div class="small-circle"></div>
+            <div class="small-circle"></div>
+            <div class="small-circle"></div>
+            <div class="small-circle"></div>
+            <div class="small-circle"></div>
+         </div>
+         <div class="cover-wrapper text-center" id="home-content">
+            <div class="cover-wrapper__inner">
+               <div class="cover-wrapper__container question" id="Result">
+
+               </div>
+               <div class="buttons" id="nobtn">
+                    <input type="button" class="btn btn-cta btn-cta__green text-uppercase" value="Да" id="Yes">
+                    <input type="button" class="btn btn-cta btn-cta__green text-uppercase" value="Нет" id="No">
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <div style="visibility: hidden;">
+    {% autoescape off %}
+        {{ Career_Guidance }}
+    {% endautoescape %}
+   </div>
+   <div style="visibility: hidden;">
+    {% autoescape off %}
+        {{ Personality_Type }}
+    {% endautoescape %}
+   </div>
+   <p style="visibility: hidden;" id="profec">
+    {% autoescape off %}
+        {{ Result }}
+    {% endautoescape %}
+   </p>
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js'></script>
+   <script  src="{% static './script.js' %}"></script>
+   {% comment %} <script src="{% static './web.js' %}"></script> {% endcomment %}
+   <script>
+    let Career_Guidance = new Array();
+    let Answer_first = new Array();
+    
+    try {
+        for ( let i = 0; i < document.querySelectorAll(".questions").length; i++ ) {
+            Career_Guidance.push(document.querySelectorAll(".questions")[i].firstChild.nodeValue);
+        }
+    } catch (err) {
+        Career_Guidance.pop()
+    }
+
+    try {
+        for (let i = 0;  i < document.querySelectorAll(".questions_p").length; i++) {
+            Answer_first.push(document.querySelectorAll(".questions_p")[i].firstChild.nodeValue);
+        }
+    } catch (err) {
+        Answer_first.pop()
+    }
+
+    
+    var array3 = [...new Set([...Career_Guidance ,...Answer_first])];
+    array3.push(`Поздравляем по нашим подсчетам вы - ${document.getElementById("profec").firstChild.nodeValue}`)
+
+    document.getElementById("Result").innerText = "Начнем";
+
+    let i = 0;
+    document.getElementById("Yes").addEventListener('click', function() {
+        document.getElementById("Result").innerText = array3[i];
+        i++;
+    })
+
+    document.getElementById("No").addEventListener('click', function() {
+        document.getElementById("Result").innerText = array3[i];
+        i++;
+    })
+
+    var strt = `Поздравляем по нашим подсчетам вы - ${document.getElementById("profec").innerText}`;
+    if ( document.getElementById("Result").innerText ==  strt) {
+        document.getElementById("nobtn").style.display = 'none';
+    }
+
+    console.log(
+        Career_Guidance,
+        Answer_first,
+        array3
+    );
+   </script>
+   </body>
+</html>
